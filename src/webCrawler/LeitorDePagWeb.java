@@ -100,13 +100,14 @@ public class LeitorDePagWeb {
 	public static void acharLinks(String url, int nivel, int nivelDeParada, String palavraBuscar) {
 		threadPool.submit(() -> {
 			if(NIVEL_ATUAL == nivelDeParada) {
-				threadPool.shutdownNow();
+				threadPool.shutdown();
 				
 			}else {
 				NIVEL_ATUAL = nivel;
 				String pagina = lePagina(url);
 				RegexLink.achandoLinks(pagina, nivel, nivelDeParada, palavraBuscar);
-				
+			}
+			if(threadPool.isShutdown()) {
 				System.out.println("Esses foram os links onde foi encontrado a palavra: " + palavraBuscar);
 				Set<String> caminhos = buscar(palavraBuscar);
 				for (String string : caminhos) {
